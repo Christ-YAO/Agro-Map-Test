@@ -1,33 +1,66 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
+import { toast } from "sonner";
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  image: string;
+  creationAt: string; // ISO date
+  updatedAt: string; // ISO date
+}
+
+export interface Product {
+  id: number;
+  title: string;
+  slug: string;
+  price: number;
+  description: string;
+  category: Category;
+  images: string[];
+  creationAt: string; // ISO date
+  updatedAt: string; // ISO date
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [items, setItems] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const response = await fetch(
+          "https://api.escuelajs.co/api/v1/products",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setItems(data);
+        toast.success("Items fetched successfully");
+      } catch (error) {
+        toast.error("Error fetching items");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  console.log(items);
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p className="text-red-500">
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isLoading && (
+        <div className="flex justify-center items-center h-screen animate-pulse">
+          Loading...
+        </div>
+      )}
     </>
   );
 }
