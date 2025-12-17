@@ -9,36 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-export interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  image: string;
-  creationAt: string; // ISO date
-  updatedAt: string; // ISO date
-}
-
-export interface Product {
-  id: number;
-  title: string;
-  slug: string;
-  price: number;
-  description: string;
-  category: Category;
-  images: string[];
-  creationAt: string; // ISO date
-  updatedAt: string; // ISO date
-}
+import type { Product } from "./types/product";
+import ProductsTable from "./_components/ProductsTable";
 
 function App() {
   const [items, setItems] = useState<Product[]>([]);
@@ -100,72 +72,50 @@ function App() {
 
   console.log(items);
   return (
-    <div className="p-16">
-      {isLoading ? (
-        <div className="flex justify-center items-center h-screen animate-pulse">
-          Loading...
-        </div>
-      ) : (
-        <div className="w-full">
-          <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-            <>
-              {STATS.map((stat) => (
-                <Card key={stat.label}>
-                  <CardHeader>
-                    <CardDescription> {stat.label} </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                      {stat.value}
-                    </CardTitle>
-                    <CardAction>
-                      {/* <Badge variant="outline">
+    <div className="p-8 max-w-5xl mx-auto space-y-8">
+      <h1 className="text-3xl font-bold text-center underline">
+        AGRO-MAP TEST
+      </h1>
+      <div className="space-y-8">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-screen animate-pulse">
+            Loading...
+          </div>
+        ) : (
+          <div className="w-full space-y-8">
+            <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+              <>
+                {STATS.map((stat) => (
+                  <Card key={stat.label}>
+                    <CardHeader>
+                      <CardDescription> {stat.label} </CardDescription>
+                      <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                        {stat.value}
+                      </CardTitle>
+                      <CardAction>
+                        {/* <Badge variant="outline">
                     <IconTrendingUp />
                     +12.5%
                   </Badge> */}
-                    </CardAction>
-                  </CardHeader>
-                  <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                    {/* <div className="line-clamp-1 flex gap-2 font-medium">
+                      </CardAction>
+                    </CardHeader>
+                    <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                      {/* <div className="line-clamp-1 flex gap-2 font-medium">
                   Trending up this month <IconTrendingUp className="size-4" />
                 </div>
                 <div className="text-muted-foreground">
                   Visitors for the last 6 months
                 </div> */}
-                  </CardFooter>
-                </Card>
-              ))}
-            </>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </>
+            </div>
+            <hr className="border-t-2 border-gray-200" />
+            <ProductsTable items={items} />
           </div>
-
-          <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Image</TableHead>
-                <TableHead>Nom</TableHead>
-                <TableHead>Prix</TableHead>
-                <TableHead className="text-right">Catégorie</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <img
-                      src={item.images[0]}
-                      alt={item.title}
-                      width={100}
-                      height={100}
-                    />
-                  </TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.price}</TableCell>
-                  <TableCell>{item.category.name}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
