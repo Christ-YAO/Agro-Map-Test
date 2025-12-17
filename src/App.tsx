@@ -9,6 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export interface Category {
   id: number;
@@ -97,31 +106,64 @@ function App() {
           Loading...
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-          {STATS.map((stat) => (
-            <Card key={stat.label}>
-              <CardHeader>
-                <CardDescription> {stat.label} </CardDescription>
-                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                  {stat.value}
-                </CardTitle>
-                <CardAction>
-                  {/* <Badge variant="outline">
+        <div className="w-full">
+          <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+            <>
+              {STATS.map((stat) => (
+                <Card key={stat.label}>
+                  <CardHeader>
+                    <CardDescription> {stat.label} </CardDescription>
+                    <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                      {stat.value}
+                    </CardTitle>
+                    <CardAction>
+                      {/* <Badge variant="outline">
                     <IconTrendingUp />
                     +12.5%
                   </Badge> */}
-                </CardAction>
-              </CardHeader>
-              <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                {/* <div className="line-clamp-1 flex gap-2 font-medium">
+                    </CardAction>
+                  </CardHeader>
+                  <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                    {/* <div className="line-clamp-1 flex gap-2 font-medium">
                   Trending up this month <IconTrendingUp className="size-4" />
                 </div>
                 <div className="text-muted-foreground">
                   Visitors for the last 6 months
                 </div> */}
-              </CardFooter>
-            </Card>
-          ))}
+                  </CardFooter>
+                </Card>
+              ))}
+            </>
+          </div>
+
+          <Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Image</TableHead>
+                <TableHead>Nom</TableHead>
+                <TableHead>Prix</TableHead>
+                <TableHead className="text-right">Catégorie</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <img
+                      src={item.images[0]}
+                      alt={item.title}
+                      width={100}
+                      height={100}
+                    />
+                  </TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.price}</TableCell>
+                  <TableCell>{item.category.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>
