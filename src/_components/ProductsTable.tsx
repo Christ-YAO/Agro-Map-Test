@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -12,13 +11,12 @@ import type { Product } from "@/types/product";
 export default function ProductsTable({ items }: { items: Product[] }) {
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Image</TableHead>
           <TableHead>Nom</TableHead>
           <TableHead>Prix</TableHead>
-          <TableHead className="text-right">Catégorie</TableHead>
+          <TableHead>Catégorie</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
