@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { toast } from "sonner";
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export interface Category {
   id: number;
@@ -53,15 +61,70 @@ function App() {
     fetchData();
   }, []);
 
+  const averagePrice =
+    items.length > 0
+      ? items.reduce((sum, item) => sum + item.price, 0) / items.length
+      : 0;
+  const minPrice =
+    items.length > 0 ? Math.min(...items.map((item) => item.price)) : 0;
+  const maxPrice =
+    items.length > 0 ? Math.max(...items.map((item) => item.price)) : 0;
+
+  const STATS = [
+    {
+      label: "Nombre total de productos",
+      value: items.length,
+    },
+    {
+      label: "Prix moyen",
+      value: `$${averagePrice.toFixed(2)}`,
+    },
+    {
+      label: "Prix minimum",
+      value: `$${minPrice}`,
+    },
+    {
+      label: "Prix maximum",
+      value: `$${maxPrice}`,
+    },
+  ];
+
   console.log(items);
   return (
-    <>
-      {isLoading && (
+    <div className="p-16">
+      {isLoading ? (
         <div className="flex justify-center items-center h-screen animate-pulse">
           Loading...
         </div>
+      ) : (
+        <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+          {STATS.map((stat) => (
+            <Card key={stat.label}>
+              <CardHeader>
+                <CardDescription> {stat.label} </CardDescription>
+                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                  {stat.value}
+                </CardTitle>
+                <CardAction>
+                  {/* <Badge variant="outline">
+                    <IconTrendingUp />
+                    +12.5%
+                  </Badge> */}
+                </CardAction>
+              </CardHeader>
+              <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                {/* <div className="line-clamp-1 flex gap-2 font-medium">
+                  Trending up this month <IconTrendingUp className="size-4" />
+                </div>
+                <div className="text-muted-foreground">
+                  Visitors for the last 6 months
+                </div> */}
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       )}
-    </>
+    </div>
   );
 }
 
